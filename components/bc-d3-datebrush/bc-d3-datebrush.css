@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  color: red;
+}
+
+:host::shadow .brush .extent {
+ 	stroke: #fff;
+/*       fill-opacity: .125;*/
+ 	shape-rendering: crispEdges;
+}
+
+:host::shadow g.context rect.background{
+/*      fill:rgb(255,255,255);*/
+  fill: #ccccdd;
+	visibility: visible !important;
+  fill-opacity: .1;
+}
+
+:host::shadow g.brush rect.extent {
+  fill: steelblue;
+  stroke: steelblue;
+  stroke-width: 1px;
+  fill-opacity: .5;
+}
+
+:host::shadow .axis path, :host .axis line {
+  fill: none;
+	stroke: #ccccdd;
+ 	shape-rendering: crispEdges;
+}
+
+:host::shadow g.context g.axis path {
+	stroke-opacity: 1;
+}
+
+:host::shadow g.context g.axis line {
+	stroke-opacity: 1;
+}
+
+:host::shadow g.tick text {
+  color: rgb(0, 0, 0);
+  fill: #000000;
+}

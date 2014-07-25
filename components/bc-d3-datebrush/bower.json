@@ -1,0 +1,10 @@
+{
+  "name": "bc-d3-datebrush",
+  "version": "0.1.0",
+  "keywords": "d3, polymer, brush, date-range, web-components",
+  "main": "bc-d3-datebrush.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.1",
+    "bc-d3-chart": "bilgecode/bc-d3-chart#~0.1.0"
+  }
+}

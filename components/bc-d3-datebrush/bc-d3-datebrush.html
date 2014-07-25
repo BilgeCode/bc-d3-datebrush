@@ -1,0 +1,258 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../bc-d3-chart/bc-d3-chart.html">
+
+<!--
+Provides a simple scalable d3 brush object
+
+##### Example
+
+    <bc-d3-datebrush
+      domain="{{domain}}"
+      extent="{{extent}}"
+      width="300"
+      height="80"></bc-d3-datebrush>
+
+@element bc-d3-datebrush
+@blurb Provides a simple scalable d3 brush object for a date range
+@status alpha
+@homepage https://github.com/BilgeCode/bc-d3-datebrush
+-->
+<polymer-element
+  name="bc-d3-datebrush"
+  extends="bc-d3-chart"
+  attributes="extent">
+
+  <template>
+
+    <link rel="stylesheet" href="bc-d3-datebrush.css" />
+    <shadow></shadow>
+
+  </template>
+
+  <script>
+
+    Polymer('bc-d3-datebrush', {
+
+      /**
+       * The `debug` attribute tells the brush to print debugging information
+       * to the console if available
+       *
+       * @attribute debug
+       * @type {bool}
+       */
+      // inherited
+
+      /**
+       * The `domain` attribute is the domain which the brush will cover
+       *
+       * @attribute domain
+       * @type {Array}
+       */
+      // inherited
+
+      /**
+       * The `extent` attribute is the extent to display in the brush
+       *
+       * @attribute extent
+       * @type {Array}
+       */
+      extent: null,
+
+      /**
+       * The `height` attribute is the height in pixels of the svg element
+       *
+       * @attribute height
+       * @type int
+       */
+      // inherited
+
+      /**
+       * The `width` attribute is the width in pixels of the svg element
+       *
+       * @attribute width
+       * @type int
+       */
+      // inherited
+
+      /**
+       * The `brush` property stores the brush object
+       *
+       * @property brush
+       * @type {Object} d3.brush
+       */
+      brush: null,
+
+      /**
+       * The `graphCreated` property indicates if the graph has been initialized
+       *
+       * @property graphCreated
+       * @type bool
+       */
+      graphCreated: false,
+
+      /**
+       * The `xAxis` property stores the d3 axis
+       *
+       * @property xAxis
+       * @type {Object} d3.axis
+       */
+      xAxis: null,
+
+      yAxisWidth: 0, // no y-axis here
+
+      created: function() {
+        this.super();
+        this.brush = d3.svg.brush()
+          .on("brush", this.onBrush(this));
+      },
+
+      /**
+       * The `clearGraph` method removes all the objects created
+       *
+       * @method clearGraph
+       * @return {Object} Returns undefined.
+       */
+      clearGraph: function() {
+        this.log("clearing graph");
+        this.chartContainer.selectAll(".axis").remove();
+        this.chartContainer.selectAll("g.context").remove();
+        this.chartContainer.selectAll("g.brush").remove();
+        this.chartContainer.selectAll("rect").remove();
+      },
+
+      /**
+       * The `createGraph` initializes the d3 brush chart by drawing all the
+       * elements that are then updated by `updateGraph`
+       *
+       * @method createGraph
+       * @return {Object} Returns undefined.
+       */
+      createGraph: function() {
+
+        this.clearGraph();
+
+        this.log("width: " + this.width);
+
+        var context = this.chartContainer.append("g")
+          .attr("class","context")
+          .attr("transform", "translate(0,0)");
+
+        this.xAxis = d3.svg.axis().orient("bottom").ticks(5);
+        context.append("g")
+          .attr("class", "x axis top")
+          .attr("transform", "translate(0,0)")
+          .call(this.xAxis);
+
+        context.append("g")
+          .attr("class", "brush")
+          .call(this.brush)
+          .selectAll("rect")
+          .attr("y", 0)
+          .attr("height", this.height);
+
+        this.graphCreated = true;
+
+        this.updateGraph();
+      },
+
+      /**
+       * The `extentChanged` observes the extent attribute and updates the chart
+       *
+       * @method extentChanged
+       * @return {Object} Returns undefined.
+       */
+      extentChanged: function() {
+        this.log("extent changed: " + this.extent);
+        if(this.domain != undefined) {
+          if(this.extent == undefined || this.extent == null) {
+            this.extent = this.domain;
+          }
+          this.brush.extent(this.extent);
+          this.updateGraph();
+        }
+      },
+
+      /**
+       * The `getXDomain` only uses the domain attribute not data
+       *
+       * @method getXDomain
+       * @return {Object} Returns undefined.
+       */
+      getXDomain: function() {
+        // the x domain is always the full extent for the brush axis
+        // return d3.extent(this.data, function(d) { return d.date; });
+        return this.domain;
+      },
+
+      /**
+       * The `getYDomain` y domain isn't used by the brush
+       *
+       * @method getYDomain
+       * @return {Object} Returns undefined.
+       */
+      getYDomain: function() {
+        return [0,1];
+      },
+
+      /**
+       * The `onBrush` method handles the drag event
+       *
+       * @method onBrush
+       * @return {Object} Returns undefined.
+       * @logTxt {Object} d3BrushObj
+       */
+      onBrush: function(d3BrushObj) {
+        var me = d3BrushObj;
+        return function() {
+          me.extent = me.brush.extent();
+        }
+      },
+
+      /**
+       * The `updateGraph` method builds the d3 brush chart
+       *
+       * @method updateGraph
+       * @return {Object} Returns undefined.
+       */
+      updateGraph: function() {
+
+        if(!this.graphCreated) {
+          this.createGraph();
+        }
+        else if(this.domain != undefined) {
+          // Updates the elements of the graph
+          this.log("Updating Graph.");
+
+          this.updateScales();
+
+          this.log("range: " + this.xScale.range());
+          this.log("domain: " + this.xScale.domain());
+
+          this.xAxis.scale(this.xScale);
+          this.chartContainer.selectAll("g.x")
+            .call(this.xAxis);
+
+          this.brush.x(this.xScale).extent(this.extent);
+          this.chartContainer.selectAll("g.brush")
+            .call(this.brush);
+        }
+      },
+
+      /**
+       * The `updateXScale` sets xScale property based on the domain and size
+       * uses the utc() method
+       *
+       * @method updateXScale
+       * @return {Object} Returns undefined.
+       */
+      updateXScale: function() {
+        this.xScale = d3.time.scale.utc()
+          .range([this.yAxisWidth, this.width])
+          .domain(this.getXDomain());
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

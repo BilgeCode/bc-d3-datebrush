@@ -1,0 +1,7 @@
+{
+  "name": "bc-d3-datebrush#gh-pages",
+  "private": true,
+  "dependencies": {
+    "bc-d3-datebrush": "bilgecode/bc-d3-datebrush#master"
+  }
+}

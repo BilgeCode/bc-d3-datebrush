@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>bc-d3-datebrush Demo</title>
+
+  <script src="../platform/platform.js"></script>
+  <link rel="import" href="../polymer/polymer.html">
+  <link rel="import" href="bc-d3-datebrush.html">
+
+  <style>
+    html {
+      background-color: #333;
+      color: white;
+      padding: 40px;
+    }
+    a, a:visited {
+      color: steelblue;
+    }
+  </style>
+
+</head>
+<body unresolved>
+
+  <h1>bc-d3-datebrush Demo</h1>
+
+  <p>A `bc-d3-datebrush` looks like this:</p>
+
+  <template is="auto-binding" id="demo-container">
+    <bc-d3-datebrush
+      height="80"
+      width="500"
+      debug="{{debug}}"
+      extent="{{extent}}"
+      domain="{{domain}}"></bc-d3-datebrush>
+
+    <h2>Extent Property:</h2>
+    <dl>
+      <dt>Start:</dt>
+      <dd>{{extent[0]}}</dd>
+      <dt>End:</dt>
+      <dd>{{extent[1]}}</dd>
+    </dl>
+
+    <p>
+      <a href="index.html">documentation</a> |
+      <a href="https://github.com/BilgeCode/bc-d3-datebrush">github</a>
+    </p>
+  </template>
+  <script>
+
+    var template = document.getElementById('demo-container');
+
+    template.debug = true;
+    template.extent = [
+      new Date(2014, 6, 28),
+      new Date(2014, 6, 30)
+    ];
+    template.domain = [
+      new Date(2014, 6, 25),
+      new Date(2014, 7, 2)
+    ];
+  </script>
+
+</body>
+</html>
