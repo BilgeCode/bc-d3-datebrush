@@ -1,4 +1,8 @@
 bc-d3-datebrush
-===============
+================
 
-Provides a simple scalable d3 brush object for a date range in Polymer
+See the [component page](http://bilgecode.github.io/bc-d3-datebrush) for more information.
+
+## Related components
+
+[bc-d3-singraph](http://bilgecode.github.io/bc-d3-singraph)
