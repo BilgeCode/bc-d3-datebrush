@@ -7,4 +7,4 @@ See the [component page](http://bilgecode.github.io/bc-d3-datebrush) for more in
 
 ## Related components
 
-[bc-d3-singraph](http://bilgecode.github.io/bc-d3-singraph)
+[bc-d3-areachart](http://bilgecode.github.io/bc-d3-areachart)
