@@ -1,7 +1,7 @@
 {
   "name": "bc-d3-datebrush",
   "description": "Provides a simple scalable d3 brush object",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "keywords": "d3, polymer, brush, date-range, web-components",
   "authors": [
     "Benjamin W Stookey"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "homepage": "http://bilgecode.github.io/bc-d3-datebrush/",
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3",
-    "bc-d3-chart": "bilgecode/bc-d3-chart#~0.3"
+    "polymer": "Polymer/polymer#0.4.0",
+    "bc-d3-chart": "bilgecode/bc-d3-chart#0.4.0"
   }
 }
